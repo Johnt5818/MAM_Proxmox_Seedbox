@@ -43,9 +43,9 @@ if [ -f "$FILE" ]; then
     echo "$FILE exists. if you are having problems, check the status by issueing: systemctl status mam-seedbox.service"
 else
     echo "$FILE dose not exist. Creating the file now"
-    wget -P /etc/systemd/system/ https://github.com/Johnt5818/MAM_Proxmox_Seedbox/blob/main/system_files/mam-seedbox.service
+    wget -P /etc/systemd/system/ https://raw.githubusercontent.com/Johnt5818/MAM_Proxmox_Seedbox/main/systemd_files/mam-seedbox.service
     systemctl daemon-reload
-    systemctl enable --now mam-seedbox.service
+    systemctl enable mam-seedbox.service
 fi
 
 FILE=/etc/systemd/system/mam-seedbox.timer
@@ -53,10 +53,12 @@ if [ -f "$FILE" ]; then
     echo "$FILE exists. if you are having problems, check the status by issueing: systemctl list-timers"
 else
     echo "$FILE dose not exist. Creating the file now"
-    wget -P /etc/systemd/system/ https://github.com/Johnt5818/MAM_Proxmox_Seedbox/blob/main/system_files/mam-seedbox.timer
+    wget -P /etc/systemd/system/ https://raw.githubusercontent.com/Johnt5818/MAM_Proxmox_Seedbox/main/systemd_files/mam-seedbox.timer
     systemctl daemon-reload
     systemctl enable --now mam-seedbox.timer
     systemctl list-timers
 fi
 
+
+#setup should be done at this point
 echo Setup compleate.
