@@ -1,0 +1,10 @@
+[Unit]
+Description=Update MAM seedbox IP daily
+
+[Timer]
+Unit=mam-seedbox.service
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
