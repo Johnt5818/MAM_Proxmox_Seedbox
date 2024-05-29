@@ -17,21 +17,26 @@ if (( EUID != 0 )); then
 fi
 
 #installs curl and python3 if needed.
-apk add curl && apk add python3
+apt add curl && apt add python3
 
-#create folder
-mkdir /root/mam
+#check/create root/mam folder
+if [ ! -d "$DIRECTORY" ]; then
+  mkdir /root/mam
+fi
+
 
 # Erase previous mam.cookies if present
 rm -f /root/mam/mam.cookies
 
 #check if MAM_ID is set
-MAM_ID = $(< /root/mam/mam_id.txt)
-if $MAM_ID = ""; then
+FILE=/root/mam/mam_id.txt 
+if [ -f "$FILE" ]; then
+  echo "looks like you already have a mam_id.txt file set up. if there are problems, you could check the /root/mam/mam_id.txt file and make sure the correct MAM_ID is there"
+else
   echo -n "No MAM_ID was found in ./mam_id.txt. Please add it now: "
   read -r -s MAM_ID
   touch /root/mam/mam_id.txt
-  echo $MAM_ID | /root/mam/mam_id.txt
+  echo $MAM_ID >| /root/mam/mam_id.txt
 fi
 
 #Run command to 
