@@ -35,34 +35,36 @@ rm -f /root/mam/mam.cookies
 #check if MAM_ID is set
 FILE=/root/mam/mam_id.txt 
 if [ -f "$FILE" ]; then
-  echo "looks like you already have a mam_id.txt file set up. if there are problems, you could check the /root/mam/mam_id.txt file and make sure the correct MAM_ID is there"
+  echo -n "looks like you already have a mam_id.txt file set up. if there are problems, you could check the /root/mam/mam_id.txt file and make sure the correct MAM_ID is there"
+  MAM_ID=$(cat /root/mam/mam_id.txt)
 else
   echo -n "No MAM_ID was found in ./mam_id.txt. Please add it now: "
-  read -r -s MAM_ID
+  read -r MAM_ID
   touch /root/mam/mam_id.txt
   echo $MAM_ID >| /root/mam/mam_id.txt
 fi
 
 #Run command to 
-curl -c root/mam/mam.cookie -b 'mam_id=${MAM_ID}' https://t.myanonamouse.net/json/dynamicSeedbox.php
+echo -n "Getting mam cookie"
+curl -c /root/mam/mam.cookie -b mam_id=$MAM_ID https://t.myanonamouse.net/json/dynamicSeedbox.php
 #would like to get this updated to check the return message to make sure it succeeded. Should be something like this but getting an error on sys.exit(not
 # curl -c root/mam/mam.cookie -b 'mam_id=${MAM_ID}' https://t.myanonamouse.net/json/dynamicSeedbox.php # | python3 -c \"import sys,json; sys.exit(not json.load(sys.stdin)['Success'])\"
 
 #create's reoconnect systemcmd files and enables them if it has not already been done
 FILE=/etc/systemd/system/mam-seedbox.service
 if [ -f "$FILE" ]; then
-    echo "$FILE exists. if you are having problems, check the status by issueing: systemctl status mam-seedbox.service"
+    echo -n "$FILE exists. if you are having problems, check the status by issueing: systemctl status mam-seedbox.service"
 else
-    echo "$FILE dose not exist. Creating the file now"
+    echo -n "$FILE dose not exist. Creating the file now"
     wget -P /etc/systemd/system/ https://raw.githubusercontent.com/Johnt5818/MAM_Proxmox_Seedbox/main/systemd_files/mam-seedbox.service
     systemctl daemon-reload
 fi
 
 FILE=/etc/systemd/system/mam-seedbox.timer
 if [ -f "$FILE" ]; then
-    echo "$FILE exists. if you are having problems, check the status by issueing: systemctl list-timers"
+    echo -n "$FILE exists. if you are having problems, check the status by issueing: systemctl list-timers"
 else
-    echo "$FILE dose not exist. Creating the file now"
+    echo -n "$FILE dose not exist. Creating the file now"
     wget -P /etc/systemd/system/ https://raw.githubusercontent.com/Johnt5818/MAM_Proxmox_Seedbox/main/systemd_files/mam-seedbox.timer
     systemctl daemon-reload
     systemctl enable --now mam-seedbox.timer
