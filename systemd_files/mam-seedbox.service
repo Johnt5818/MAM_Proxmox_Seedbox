@@ -5,4 +5,4 @@ After=wireguard_startup.service
 [Service]
 Type=oneshot
 User=root
-ExecStart=/usr/bin/curl -c /root/mam/mam.cookie -b /root/mam/mam.cookie https://t.myanonamouse.net/json/dynamicSeedbox.php
+ExecStart=/usr/bin/curl -b /root/mam/mam.cookie https://t.myanonamouse.net/json/dynamicSeedbox.php

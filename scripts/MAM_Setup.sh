@@ -33,22 +33,27 @@ fi
 rm -f /root/mam/mam.cookies
 
 #check if MAM_ID is set
-FILE=/root/mam/mam_id.txt 
+echo -n "checking if MAM_ID is set"
+FILE=/root/mam/mam.cookie 
 if [ -f "$FILE" ]; then
-  echo -n "looks like you already have a mam_id.txt file set up. if there are problems, you could check the /root/mam/mam_id.txt file and make sure the correct MAM_ID is there"
-  MAM_ID=$(cat /root/mam/mam_id.txt)
+  echo -n "looks like you already have a mam.cookie file set up. if there are problems, you could check the /root/mam/mam.cookie file and make sure the correct MAM_ID is there"
+  MAM_ID=$(cat /root/mam/mam.cookie)
+  echo -n
 else
-  echo -n "No MAM_ID was found in ./mam_id.txt. Please add it now: "
+  echo -n "No MAM_ID was found in ./mam.cookie. Please past in your MAM_ID now: "
   read -r MAM_ID
-  touch /root/mam/mam_id.txt
-  echo $MAM_ID >| /root/mam/mam_id.txt
+  touch /root/mam/mam.cookie
+  echo $MAM_ID >| /root/mam/mam.cookie
+  echo -n
 fi
+echo -n "MAM_ID is now stored in /root/mam/mam.cookie. you can update it there if it changes."
 
 #Run command to 
-echo -n "Getting mam cookie"
-curl -c /root/mam/mam.cookie -b mam_id=$MAM_ID https://t.myanonamouse.net/json/dynamicSeedbox.php
+echo -n "Updating Session with mam"
+curl -b mam_id=$MAM_ID https://t.myanonamouse.net/json/dynamicSeedbox.php
 #would like to get this updated to check the return message to make sure it succeeded. Should be something like this but getting an error on sys.exit(not
-# curl -c root/mam/mam.cookie -b 'mam_id=${MAM_ID}' https://t.myanonamouse.net/json/dynamicSeedbox.php # | python3 -c \"import sys,json; sys.exit(not json.load(sys.stdin)['Success'])\"
+# curl -b 'mam_id=${MAM_ID}' https://t.myanonamouse.net/json/dynamicSeedbox.php # | python3 -c \"import sys,json; sys.exit(not json.load(sys.stdin)['Success'])\"
+#then if it fails, output a message saying that they should update there MAM_ID in ./mam.cookie and try again?
 
 #create's reoconnect systemcmd files and enables them if it has not already been done
 FILE=/etc/systemd/system/mam-seedbox.service
